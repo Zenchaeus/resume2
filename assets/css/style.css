@@ -36,13 +36,26 @@ body::before {
 }
 
 a {
-  color: #18d26e;
+  color: white;
   text-decoration: none;
 }
 
 a:hover {
   color: #35e888;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+a:link {
+  color: white;
+  background-color: transparent;
   text-decoration: none;
+}
+
+a:active {
+  color: yellow;
+  background-color: transparent;
+  text-decoration: underline;
 }
 
 h1,
