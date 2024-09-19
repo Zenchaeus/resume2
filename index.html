@@ -687,28 +687,70 @@
         </div>
       </div>
 
-      <form action="https://formspree.io/f/xovaoqyb" method="post" role="form" class="php-email-form mt-4">
-        <div class="row">
-          <div class="col-md-6 form-group">
+      <form id="contactForm" action="https://formspree.io/f/xovaoqyb" method="post" role="form" class="php-email-form mt-4">
+    <div class="row">
+        <div class="col-md-6 form-group">
             <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
-          </div>
-          <div class="col-md-6 form-group mt-3 mt-md-0">
+        </div>
+        <div class="col-md-6 form-group mt-3 mt-md-0">
             <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-          </div>
         </div>
-        <div class="form-group mt-3">
-          <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-        </div>
-        <div class="form-group mt-3">
-          <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-        </div>
-        <div class="my-3">
-          <div class="loading">Loading</div>
-          <div class="error-message">Error</div>
-          <div class="sent-message">Your message has been sent. Thank you!</div>
-        </div>
-        <div class="text-center"><button type="submit">Send Message</button></div>
-      </form>
+    </div>
+    <div class="form-group mt-3">
+        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+    </div>
+    <div class="form-group mt-3">
+        <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+    </div>
+    
+    <!-- Hidden input for redirecting after submission -->
+    <input type="hidden" name="_next" value="//site.io/thanks.html" />
+
+    <div class="my-3">
+        <div class="loading" style="display: none;">Loading</div>
+        <div class="error-message" style="display: none;">Error sending message. Please try again.</div>
+        <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
+    </div>
+    
+    <div class="text-center"><button type="submit">Send Message</button></div>
+</form>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const formData = new FormData(this);
+    const loading = document.querySelector('.loading');
+    const errorMessage = document.querySelector('.error-message');
+    const sentMessage = document.querySelector('.sent-message');
+
+    loading.style.display = 'block'; // Show loading indicator
+    errorMessage.style.display = 'none'; // Hide error message
+    sentMessage.style.display = 'none'; // Hide sent message
+
+    fetch(this.action, {
+        method: this.method,
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        loading.style.display = 'none'; // Hide loading indicator
+        if (response.ok) {
+            sentMessage.style.display = 'block'; // Show success message
+            window.location.href = "https://nezalted.vercel.app"; // Redirect after successful submission
+            this.reset(); // Reset form fields
+        } else {
+            throw new Error('Error sending message.');
+        }
+    })
+    .catch(error => {
+        loading.style.display = 'none'; // Hide loading indicator
+        errorMessage.style.display = 'block'; // Show error message
+    });
+});
+</script>
 
     </div>
   </section><!-- End Contact Section -->
