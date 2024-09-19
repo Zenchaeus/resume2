@@ -702,16 +702,11 @@
     <div class="form-group mt-3">
         <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
     </div>
-    
-    <!-- Hidden input for redirecting after submission -->
-    <input type="hidden" name="_next" value="//site.io/thanks.html" />
-
     <div class="my-3">
         <div class="loading" style="display: none;">Loading</div>
         <div class="error-message" style="display: none;">Error sending message. Please try again.</div>
         <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
     </div>
-    
     <div class="text-center"><button type="submit">Send Message</button></div>
 </form>
 
@@ -737,19 +732,26 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     })
     .then(response => {
         loading.style.display = 'none'; // Hide loading indicator
-        if (response.ok) {
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
+        }
+        return response.json(); // Parse JSON response
+    })
+    .then(data => {
+        if (data.ok) { // Check if the response indicates success
             sentMessage.style.display = 'block'; // Show success message
-            window.location.href = "https://nezalted.vercel.app"; // Redirect after successful submission
             this.reset(); // Reset form fields
         } else {
-            throw new Error('Error sending message.');
+            throw new Error(data.error || 'Error sending message.');
         }
     })
     .catch(error => {
         loading.style.display = 'none'; // Hide loading indicator
+        errorMessage.textContent = error.message; // Set error message
         errorMessage.style.display = 'block'; // Show error message
     });
 });
+
 </script>
 
     </div>
